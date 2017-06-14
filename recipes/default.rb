@@ -8,6 +8,7 @@
 #Install java on Centos
 yum_package 'java-1.7.0-openjdk-devel' do
   action :install # Install is default and does not need to be specified end group 'chef' group 'tomcat'
+end
 #
 #Create group and user Chef
 group 'chef' 
@@ -27,6 +28,14 @@ remote_file '/tmp/apache-tomcat-8.5.15.tar.gz' do
   mode '0755'
   action :create
 end
+group 'tomcat'
+
+user 'tomcat' do
+  group 'tomcat'
+  system true
+  shell '/bin/bash'
+end
+
 #
 #Create the tomcat directory
 #
@@ -44,12 +53,14 @@ bash 'extract_module' do
   EOH
 end
 
+execute 'chgrp -R tomcat /opt/tomcat/conf'
+
 directory '/opt/tomcat/conf' do 
   mode '0070'
 end
 
-execute 'chmod g+r conf/*'
-execute 'chown -R tomcat webapps/ work/ temp/ logs/'
+execute 'chmod g+r /opt/tomcat/conf/*'
+execute 'chown -R tomcat /opt/tomcat/webapps/ /opt/tomcat/work/ /opt/tomcat/temp/ /opt/tomcat/logs/'
 
 template '/etc/systemd/system/tomcat.service' do # ~FC033
   source 'tomcat.service.erb'
