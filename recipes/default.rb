@@ -28,12 +28,14 @@ remote_file '/tmp/apache-tomcat-8.5.15.tar.gz' do
   action :create
 end
 #
-#Extract tomcat tar
+#Create the tomcat directory
 #
 directory "/opt/tomcat" do
   group 'tomcat' 
 end 
-
+#
+# Extract the tomcat tar
+#
 bash 'extract_module' do
   cwd '/tmp'
   code <<-EOH
@@ -49,3 +51,15 @@ end
 execute 'chmod g+r conf/*'
 execute 'chown -R tomcat webapps/ work/ temp/ logs/'
 
+template '/etc/systemd/system/tomcat.service' do # ~FC033
+  source 'tomcat.service.erb'
+  mode '0644'
+  owner 'tomcat'
+  group 'tomcat'
+end
+
+execute 'systemctl daemon-reload'
+
+service "tomcat" do
+  action [ :start, :enable ]
+end
