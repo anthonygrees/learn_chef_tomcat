@@ -42,18 +42,21 @@ end
 #Create the tomcat directory
 #
 #execute 'mkdir /opt/tomcat'
-
-directory "/opt/tomcat" do
+directory '/opt/tomcat' do
   group 'tomcat' 
   mode '774'
 end 
 #
 # Extract the tomcat tar
 #
+src_filename = 'apache-tomcat-8.5.15.tar.gz'
+extract_path = '/opt/tomcat'
+extract_strip = ' --strip-components=1'
+#
 bash 'extract_module' do
   cwd '/tmp'
   code <<-EOH
-    tar xvf apache-tomcat-8.5.15.tar.gz -C /opt/tomcat --strip-components=1
+    tar xvf #{src_filename} -C #{extract_path} #{extract_strip}
   EOH
   not_if { ::File.exist?('/opt/tomcat/RUNNING.txt') }  ## Example Guard
 end
