@@ -4,7 +4,7 @@ maintainer_email 'anthony_rees01@hotmail.com'
 license 'all_rights'
 description 'Installs/Configures learn_chef_tomcat'
 long_description 'Installs/Configures Tomcat on a Centos server'
-version '0.3.1'
+version '0.3.2'
 
 # If you upload to Supermarket you should set this so your cookbook
 # gets a `View Issues` link

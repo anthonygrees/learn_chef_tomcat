@@ -18,6 +18,9 @@ ExecStop=/bin/kill -15 $MAINPID
 
 User=tomcat
 Group=tomcat
+UMask=0007
+RestartSec=10
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
